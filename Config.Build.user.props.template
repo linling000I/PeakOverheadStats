@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Path to your PEAK game installation -->
+    <GameDir>E:\steam1\steamapps\common\PEAK</GameDir>
+  </PropertyGroup>
+</Project>

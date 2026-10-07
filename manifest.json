@@ -1,0 +1,9 @@
+{
+  "name": "PeakOverheadStats",
+  "version_number": "1.0.2",
+  "website_url": "https://thunderstore.io/c/peak/p/LengSword/PeakStatsEx/",
+  "description": "PeakStatsEx stats HUD (timer, height, day/night, map route) with teammate stamina bars moved overhead above player heads.",
+  "dependencies": [
+    "BepInEx-BepInExPack_PEAK-5.4.75301"
+  ]
+}
