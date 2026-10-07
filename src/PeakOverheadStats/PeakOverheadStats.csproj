@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Import per-user paths (GameDir, BepInExDir, etc.) -->
+  <Import Project="..\..\Config.Build.user.props" Condition="Exists('..\..\Config.Build.user.props')" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>PeakOverheadStats</AssemblyName>
+    <RootNamespace>PeakOverheadStats</RootNamespace>
+
+    <!-- ===== Thunderstore package metadata ===== -->
+    <ThunderstoreTeam>PeakMods</ThunderstoreTeam>
+    <ThunderstorePackageName>PeakOverheadStats</ThunderstorePackageName>
+    <ThunderstoreVersion>1.0.0</ThunderstoreVersion>
+    <ThunderstoreDescription>Stats HUD based on PeakStatsEx (timer, height, day/night, map route) with teammate stamina bars displayed overhead instead of bottom-left.</ThunderstoreDescription>
+    <ThunderstoreWebsiteUrl>https://thunderstore.io/c/peak/</ThunderstoreWebsiteUrl>
+    <ThunderstoreDependencies>BepInEx-BepInExPack_PEAK-5.4.2100</ThunderstoreDependencies>
+
+    <PackageOutputDir>$(MSBuildThisFileDirectory)..\..\artifacts\package\</PackageOutputDir>
+  </PropertyGroup>
+
+  <!-- ===== Game / BepInEx references ===== -->
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(BepInExDir)\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExDir)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(GameManagedDir)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(GameManagedDir)\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(GameManagedDir)\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(GameManagedDir)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PhotonUnityNetworking">
+      <HintPath>$(GameManagedDir)\PhotonUnityNetworking.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PhotonRealtime">
+      <HintPath>$(GameManagedDir)\PhotonRealtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Zorro.Core.Runtime">
+      <HintPath>$(GameManagedDir)\Zorro.Core.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(GameManagedDir)\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>$(GameManagedDir)\DOTween.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DOTweenPro">
+      <HintPath>$(GameManagedDir)\DOTweenPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(GameManagedDir)\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Steamworks.NET">
+      <HintPath>$(GameManagedDir)\com.rlabrecque.steamworks.net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- ===== Copy DLL to BepInEx plugins folder during dev ===== -->
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll"
+          DestinationFolder="$(BepInExPluginsDir)"
+          ContinueOnError="true" />
+  </Target>
+
+  <!-- ===== Assemble Thunderstore package (Release only) ===== -->
+  <Target Name="PackThunderstore" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="=== Packing Thunderstore package ==+" Importance="high" />
+
+    <RemoveDir Directories="$(PackageOutputDir)" ContinueOnError="true" />
+    <MakeDir Directories="$(PackageOutputDir)plugins" />
+
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll"
+          DestinationFolder="$(PackageOutputDir)plugins" />
+
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\manifest.json" DestinationFolder="$(PackageOutputDir)" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\icon.png" DestinationFolder="$(PackageOutputDir)" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\README.md" DestinationFolder="$(PackageOutputDir)" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\CHANGELOG.md" DestinationFolder="$(PackageOutputDir)" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\LICENSE" DestinationFolder="$(PackageOutputDir)" ContinueOnError="true" />
+
+    <MakeDir Directories="$(MSBuildThisFileDirectory)..\..\artifacts\thunderstore" />
+    <ZipDirectory SourceDirectory="$(PackageOutputDir)"
+                  DestinationFile="$(MSBuildThisFileDirectory)..\..\artifacts\thunderstore\$(ThunderstoreTeam)-$(ThunderstorePackageName)-$(ThunderstoreVersion).zip"
+                  Overwrite="true" />
+
+    <Message Text="Package built: artifacts\thunderstore\$(ThunderstoreTeam)-$(ThunderstorePackageName)-$(ThunderstoreVersion).zip" Importance="high" />
+  </Target>
+
+</Project>

@@ -1,7 +1,19 @@
-using System.Reflection;
+﻿using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("PeakOverheadStats")]
-[assembly: AssemblyProduct("PeakOverheadStats")]
-[assembly: AssemblyCopyright("Copyright © 2026")]
-[assembly: AssemblyVersion("1.0.2.0")]
-[assembly: AssemblyFileVersion("1.0.2.0")]
+// Bypass access checks to game assembly internals
+[assembly: IgnoresAccessChecksTo("Assembly-CSharp")]
+[assembly: IgnoresAccessChecksTo("Unity.TextMeshPro")]
+[assembly: IgnoresAccessChecksTo("DOTween")]
+
+namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+    internal sealed class IgnoresAccessChecksToAttribute : Attribute
+    {
+        public IgnoresAccessChecksToAttribute(string assemblyName)
+        {
+            AssemblyName = assemblyName;
+        }
+        public string AssemblyName { get; }
+    }
+}
