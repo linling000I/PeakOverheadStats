@@ -1,15 +1,17 @@
-# Changelog
+﻿# Changelog
+
+## 1.0.3
+- 修复了古老雕像的负重显示问题
+- 修复了机场负重空白的问题（机场中使用总条-体力条计算负重条）
+- 添加了机场显示小彩蛋
+- 玩家名称左对齐与绿色体力条对齐
+- 更新了图标和截图
 
 ## 1.0.2
-- Re-added PeakStatsEx credits and references
-- Fixed README image display using HTML img tags
-- Optimized icon and package size
+- 基于 PeakStatsEx，队友体力条移至头顶显示
+- 通过 UIPlayerNames 补丁实现头顶名牌渲染
 
-## 1.0.1
-- Fixed BepInEx dependency version (5.4.75301)
-- Removed UTF-8 BOM from text files
-- Compressed screenshots to JPG for smaller package size
-
-## 1.0.0
-- Initial release
-- Based on PeakStatsEx with teammate stamina bars moved overhead
+## 0.1.0
+- 初始版本
+- 移植 PeakStatsEx 功能（队友状态数值、体力条、攀登时间/距离、物品栏物品名称）
+- 将所有队友信息从左下角重新定位到玩家头顶（OverheadStamina 风格）
